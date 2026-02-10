@@ -1,24 +1,72 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { useEffect, useState } from "react";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import * as SystemUI from "expo-system-ui";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GlobalProvider } from "../context/GlobalContext";
+import "./globals.css";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+import CustomSplashScreen from "@/components/CustomSplashScreen";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const [appIsReady, setAppIsReady] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Pre-load necessary assets or check session here if needed
+        await SystemUI.setBackgroundColorAsync("#030014");
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  useEffect(() => {
+    if (appIsReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+  };
+
+  if (!appIsReady) {
+    return null;
+  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GlobalProvider>
+      <SafeAreaProvider>
+        {showSplash ? (
+          <CustomSplashScreen onFinish={handleSplashFinish} />
+        ) : (
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: "#030014" },
+              animation: "slide_from_right",
+              animationDuration: 300,
+            }}
+          >
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="settings" options={{ headerShown: false }} />
+            <Stack.Screen name="movies/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="tv/[id]" options={{ headerShown: false }} />
+            <Stack.Screen name="person/[id]" options={{ headerShown: false }} />
+          </Stack>
+        )}
+      </SafeAreaProvider>
+    </GlobalProvider>
   );
 }
