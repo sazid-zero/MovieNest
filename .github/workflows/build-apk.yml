@@ -29,9 +29,11 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build APK locally
+        env:
+          EXPO_USE_NPM: 1
         run: eas build --platform android --profile preview --local --non-interactive
 
       - name: Upload APK
