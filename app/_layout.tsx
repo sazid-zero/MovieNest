@@ -20,7 +20,8 @@ export default function RootLayout() {
       try {
         // Pre-load necessary assets or check session here if needed
         await SystemUI.setBackgroundColorAsync("#030014");
-        await new Promise((resolve) => setTimeout(resolve, 500));
+        // Hide native splash immediately to show custom one
+        await SplashScreen.hideAsync();
       } catch (e) {
         console.warn(e);
       } finally {
@@ -30,12 +31,6 @@ export default function RootLayout() {
 
     prepare();
   }, []);
-
-  useEffect(() => {
-    if (appIsReady) {
-      SplashScreen.hideAsync();
-    }
-  }, [appIsReady]);
 
   const handleSplashFinish = () => {
     setShowSplash(false);

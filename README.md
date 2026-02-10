@@ -11,7 +11,7 @@
 
 </div>
 
-![MovieNest Banner](https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1000)
+![MovieNest Banner](/assets/images/image.png)
 
 ## 📋 Overview
 
