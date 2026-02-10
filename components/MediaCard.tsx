@@ -114,8 +114,8 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, width = "w-[30%]", showBook
           resizeMode="cover"
         />
         {/* Media Type Badge */}
-        <View className="absolute top-2 left-2 bg-accent/90 rounded px-2 py-1">
-          <Text className="text-white text-xs font-semibold uppercase">
+        <View className="absolute top-2 left-2 bg-accent/90 rounded px-1 py-1">
+          <Text className="text-white text-[10px] font-semibold uppercase">
             {item.media_type}
           </Text>
         </View>
@@ -137,8 +137,8 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, width = "w-[30%]", showBook
 
         {/* Rating Badge - only for movies and TV */}
         {(item.vote_average ?? 0) > 0 && item.media_type !== "person" ? (
-          <View className="absolute top-2 right-2 bg-black/70 rounded-full px-2 py-1">
-            <Text className="text-yellow-400 text-xs font-semibold">
+          <View className="absolute top-2 right-2 bg-black/70 rounded-full px-1 py-1">
+            <Text className="text-yellow-400 text-[10px] font-semibold">
               ⭐ {item.vote_average?.toFixed(1)}
             </Text>
           </View>
